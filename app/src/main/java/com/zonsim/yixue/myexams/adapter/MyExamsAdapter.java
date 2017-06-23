@@ -33,6 +33,7 @@ public class MyExamsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                           @NonNull OnMyExamClickListener itemClickListener) {
         mList = list;
         mItemClickListener = itemClickListener;
+        L.i("new MyExamsAdapter()");
     }
     
     public void replaceData(@NonNull List<MyExamsResp.ExamBean> list) {

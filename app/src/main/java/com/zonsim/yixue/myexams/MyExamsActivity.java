@@ -80,6 +80,6 @@ public class MyExamsActivity extends BaseActivity implements MyExamsView {
     
     @Override
     public void showError() {
-        
+        ToastUtils.show("出错了");
     }
 }
