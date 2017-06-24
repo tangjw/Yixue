@@ -2,10 +2,10 @@
 <shape xmlns:android="http://schemas.android.com/apk/res/android">
 
     <corners
-        android:radius="4dp"/>
+        android:radius="@dimen/myexam_status_radian"/>
 
     <stroke
-        android:width="1px"
+        android:width="@dimen/myexam_status_width"
         android:color="@color/colorExamStatus4"/>
 
 

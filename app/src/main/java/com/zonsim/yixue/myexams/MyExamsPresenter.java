@@ -24,7 +24,8 @@ public class MyExamsPresenter implements BasePresenter {
     private final MyExamsRepository mExamsRepository;
     private final CompositeDisposable mDisposable;
     
-    public MyExamsPresenter(@NonNull MyExamsView view, @NonNull MyExamsRepository repository) {
+    public MyExamsPresenter(@NonNull MyExamsView view,
+                            @NonNull MyExamsRepository repository) {
         mExamsView = view;
         mExamsRepository = repository;
         mExamsView.setPresenter(this);
@@ -48,7 +49,7 @@ public class MyExamsPresenter implements BasePresenter {
     
     private void loadMyExams(boolean showLoadingUI) {
         if (showLoadingUI) {
-            mExamsView.showEmpty();
+            mExamsView.showLoadingUI(true);
         }
         
         Disposable disposable = mExamsRepository.getMyExams()
@@ -57,7 +58,8 @@ public class MyExamsPresenter implements BasePresenter {
                 .subscribe(new Consumer<MyExamsResp>() {
                     @Override
                     public void accept(@NonNull MyExamsResp myExamsResp) throws Exception {
-                        if (myExamsResp.getRet() != 0) {
+    
+                        if (myExamsResp.getRet() == 0) {
                             List<MyExamsResp.ExamBean> myExams = myExamsResp.getInfo();
                             if (myExams != null) {
                                 if (myExams.size() > 0) {
@@ -71,7 +73,7 @@ public class MyExamsPresenter implements BasePresenter {
         
                         } else {
                             mExamsView.showError();
-                        } 
+                        }
                     }
                 });
         

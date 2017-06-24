@@ -3,6 +3,7 @@ package com.zonsim.yixue.myexams;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 
 import com.zonsim.yixue.R;
 import com.zonsim.yixue.base.BaseActivity;
@@ -31,6 +32,7 @@ public class MyExamsActivity extends BaseActivity implements MyExamsView {
         }
     };
     private MyExamsPresenter mPresenter;
+    private View mVLoading;
     
     @Override
     protected void initArgs() {
@@ -46,7 +48,9 @@ public class MyExamsActivity extends BaseActivity implements MyExamsView {
         mRecyclerView.setLayoutManager(linearLayoutManager);
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         mRecyclerView.setAdapter(mExamsAdapter);
-        
+    
+    
+        mVLoading = findViewById(R.id.ll_loading);
         
     }
     
@@ -64,8 +68,8 @@ public class MyExamsActivity extends BaseActivity implements MyExamsView {
     
     @Override
     public void showMyExams(@NonNull List<MyExamsResp.ExamBean> myExams) {
-//        mExamsAdapter.replaceData();
-        mRecyclerView.setAdapter(new MyExamsAdapter(myExams,mExamClickListener));
+        mExamsAdapter.replaceData(myExams);
+        mVLoading.setVisibility(View.GONE);
     }
     
     @Override
@@ -74,8 +78,8 @@ public class MyExamsActivity extends BaseActivity implements MyExamsView {
     }
     
     @Override
-    public void showLoadingUI() {
-        
+    public void showLoadingUI(boolean isShow) {
+        mVLoading.setVisibility(isShow ? View.VISIBLE : View.GONE);
     }
     
     @Override

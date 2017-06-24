@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="myexam_status_radian">3dp</dimen>
+    <dimen name="myexam_status_width">0.6dp</dimen>
+</resources>

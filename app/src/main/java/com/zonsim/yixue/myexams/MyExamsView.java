@@ -19,7 +19,7 @@ public interface MyExamsView {
     
     void showEmpty();
     
-    void showLoadingUI();
+    void showLoadingUI(boolean isShow);
     
     void showError();
 } 
