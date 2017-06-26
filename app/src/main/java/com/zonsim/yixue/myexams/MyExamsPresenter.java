@@ -24,6 +24,8 @@ public class MyExamsPresenter implements BasePresenter {
     private final MyExamsRepository mExamsRepository;
     private final CompositeDisposable mDisposable;
     
+    private boolean isFirstLoading = true;
+    
     public MyExamsPresenter(@NonNull MyExamsView view,
                             @NonNull MyExamsRepository repository) {
         mExamsView = view;
@@ -34,7 +36,7 @@ public class MyExamsPresenter implements BasePresenter {
     
     @Override
     public void subscribe() {
-        loadMyExams(true);
+        loadMyExams(false);
     }
     
     @Override
@@ -43,14 +45,22 @@ public class MyExamsPresenter implements BasePresenter {
     }
     
     public void loadMyExams() {
-        loadMyExams(false);
+        loadMyExams(true);
     }
     
     
-    private void loadMyExams(boolean showLoadingUI) {
-        if (showLoadingUI) {
+    private void loadMyExams(boolean active) {
+    
+        if (isFirstLoading) {
             mExamsView.showLoadingUI(true);
-        }
+            isFirstLoading = false;
+        } else {
+            mExamsView.showLoadingUI(false);
+        } 
+        
+        mExamsView.setLoadingIndicator(active);
+        
+        mDisposable.clear();
         
         Disposable disposable = mExamsRepository.getMyExams()
                 .subscribeOn(Schedulers.io())
@@ -58,7 +68,9 @@ public class MyExamsPresenter implements BasePresenter {
                 .subscribe(new Consumer<MyExamsResp>() {
                     @Override
                     public void accept(@NonNull MyExamsResp myExamsResp) throws Exception {
-    
+                        
+                        mExamsView.setLoadingIndicator(false);
+                        
                         if (myExamsResp.getRet() == 0) {
                             List<MyExamsResp.ExamBean> myExams = myExamsResp.getInfo();
                             if (myExams != null) {
@@ -70,7 +82,7 @@ public class MyExamsPresenter implements BasePresenter {
                             } else {
                                 mExamsView.showError();
                             }
-        
+                            
                         } else {
                             mExamsView.showError();
                         }

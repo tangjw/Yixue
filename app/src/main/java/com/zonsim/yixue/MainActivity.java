@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
+import com.zonsim.yixue.banner.BannerActivity;
 import com.zonsim.yixue.myexams.MyExamsActivity;
 
 public class MainActivity extends AppCompatActivity {
@@ -17,6 +18,11 @@ public class MainActivity extends AppCompatActivity {
     
     public void startMyExams(View view) {
         Intent intent = new Intent(this, MyExamsActivity.class);
+        startActivity(intent);
+    }
+    
+    public void startBanner(View view) {
+        Intent intent = new Intent(this, BannerActivity.class);
         startActivity(intent);
     }
 }

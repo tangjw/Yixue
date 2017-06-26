@@ -1,6 +1,7 @@
 package com.zonsim.yixue.myexams;
 
 import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -9,10 +10,16 @@ import com.zonsim.yixue.R;
 import com.zonsim.yixue.base.BaseActivity;
 import com.zonsim.yixue.bean.MyExamsResp;
 import com.zonsim.yixue.myexams.adapter.MyExamsAdapter;
+import com.zonsim.yixue.util.L;
 import com.zonsim.yixue.util.ToastUtils;
+import com.zonsim.yixue.widget.ScrollChildSwipeRefreshLayout;
+import com.zonsim.yixue.widget.SwipeRefreshObservable;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import io.reactivex.Observable;
+import io.reactivex.functions.Consumer;
 
 /**
  * ^-^
@@ -33,6 +40,7 @@ public class MyExamsActivity extends BaseActivity implements MyExamsView {
     };
     private MyExamsPresenter mPresenter;
     private View mVLoading;
+    private ScrollChildSwipeRefreshLayout mSwipeRefreshLayout;
     
     @Override
     protected void initArgs() {
@@ -48,10 +56,18 @@ public class MyExamsActivity extends BaseActivity implements MyExamsView {
         mRecyclerView.setLayoutManager(linearLayoutManager);
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         mRecyclerView.setAdapter(mExamsAdapter);
-    
-    
+        
+        
         mVLoading = findViewById(R.id.ll_loading);
         
+        mSwipeRefreshLayout = (ScrollChildSwipeRefreshLayout) findViewById(R.id.srl_content);
+        mSwipeRefreshLayout.setColorSchemeColors(
+                ContextCompat.getColor(this, R.color.colorExamStatus1),
+                ContextCompat.getColor(this, R.color.colorExamStatus2),
+                ContextCompat.getColor(this, R.color.colorExamStatus3),
+                ContextCompat.getColor(this, R.color.colorExamStatus4)
+        );
+        mSwipeRefreshLayout.setScrollUpChild(mRecyclerView);
     }
     
     @Override
@@ -59,6 +75,24 @@ public class MyExamsActivity extends BaseActivity implements MyExamsView {
         MyExamsRepository repository = new MyExamsRepository("112");
         MyExamsPresenter presenter = new MyExamsPresenter(this, repository);
         mPresenter.subscribe();
+    }
+    
+    @Override
+    protected void setListener() {
+        
+        Observable<Object> observable = new SwipeRefreshObservable(mSwipeRefreshLayout);
+        observable.subscribe(new Consumer<Object>() {
+                    @Override
+                    public void accept(@NonNull Object o) throws Exception {
+                        L.i("refresh 1................");
+                        mPresenter.loadMyExams();
+                        
+                        
+//                                mSwipeRefreshLayout.setRefreshing(false);
+                        
+                    }
+                });
+        
     }
     
     @Override
@@ -79,7 +113,13 @@ public class MyExamsActivity extends BaseActivity implements MyExamsView {
     
     @Override
     public void showLoadingUI(boolean isShow) {
+        System.out.println(isShow +"---------------");
         mVLoading.setVisibility(isShow ? View.VISIBLE : View.GONE);
+    }
+    
+    @Override
+    public void setLoadingIndicator(boolean active) {
+        mSwipeRefreshLayout.setRefreshing(active);
     }
     
     @Override

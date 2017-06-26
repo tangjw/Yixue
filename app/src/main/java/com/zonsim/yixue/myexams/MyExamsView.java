@@ -21,5 +21,7 @@ public interface MyExamsView {
     
     void showLoadingUI(boolean isShow);
     
+    void setLoadingIndicator(boolean active);
+    
     void showError();
 } 
