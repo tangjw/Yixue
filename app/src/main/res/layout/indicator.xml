@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.zonsim.yixue.banner.indicator.CirclePagerIndicator
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/indicator"
+    android:layout_width="match_parent"
+    android:layout_height="30dp"
+    android:layout_gravity="bottom"
+    android:background="#CCCC"
+    app:circle_indicator_centerHorizontal="true"
+    app:circle_indicator_color="#FFF"
+    app:circle_indicator_fill_color="@color/colorPrimary"
+    app:circle_indicator_indicator_radius="5dp"
+    app:circle_indicator_radius="4dp"/>

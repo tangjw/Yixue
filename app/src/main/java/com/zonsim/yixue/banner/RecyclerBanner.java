@@ -8,10 +8,12 @@ import android.support.v7.widget.LinearSnapHelper;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
+import com.zonsim.yixue.R;
 import com.zonsim.yixue.banner.adapter.BannerAdapter;
 import com.zonsim.yixue.banner.indicator.CirclePagerIndicator;
 
@@ -31,6 +33,7 @@ public class RecyclerBanner extends FrameLayout {
     private CirclePagerIndicator mIndicator;
     
     private int mCurrentPosition;
+    private Handler mHandler;
     
     public RecyclerBanner(Context context) {
         this(context, null);
@@ -53,14 +56,25 @@ public class RecyclerBanner extends FrameLayout {
         mCurrentPosition = Integer.MAX_VALUE / 2 - (Integer.MAX_VALUE / 2 % mBanners.size());
         mRecyclerView.scrollToPosition(mCurrentPosition);
         mIndicator.setCurrentItem(mCurrentPosition);
-        new Handler().postDelayed(new Runnable() {
+        if (mHandler == null) {
+        
+            mHandler = new Handler();
+        } else {
+            mHandler.removeCallbacksAndMessages(null);
+        
+        }
+    
+    
+        mHandler.postDelayed(new Runnable() {
             @Override
             public void run() {
                 mRecyclerView.smoothScrollToPosition(++mCurrentPosition);
                 mIndicator.setCurrentItem(mCurrentPosition);
-                new Handler().postDelayed(this, 2000L);
+                mHandler.postDelayed(this, 5000L);
             }
-        }, 2000L);
+        }, 5000L);
+        
+        
     }
     
     private void init() {
@@ -71,8 +85,11 @@ public class RecyclerBanner extends FrameLayout {
         mRecyclerView = new RecyclerView(getContext());
         
         addView(mRecyclerView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+    
+    
+        mIndicator = (CirclePagerIndicator) LayoutInflater.from(getContext()).inflate(R.layout.indicator, this, false);
         
-        mIndicator = new CirclePagerIndicator(getContext());
+        
         mIndicator.bindViewPager(mRecyclerView);
         
         
@@ -139,5 +156,14 @@ public class RecyclerBanner extends FrameLayout {
             
             return targetSnapPosition;
         }
+    }
+    
+    @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        if (mHandler != null) {
+            mHandler.removeCallbacksAndMessages(null);
+        }
+        
     }
 }
