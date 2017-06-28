@@ -5,6 +5,7 @@ import android.support.v7.widget.LinearSnapHelper;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
+import com.zonsim.yixue.banner.indicator.BannerIndicator;
 import com.zonsim.yixue.util.L;
 
 /**
@@ -14,61 +15,63 @@ import com.zonsim.yixue.util.L;
 
 public class BannerSnapHelper extends LinearSnapHelper {
     
+    private final BannerIndicator mIndicator;
+    private int indicatorPosition = 0;
+    
+    public BannerSnapHelper( BannerIndicator indicator) {
+    
+        mIndicator = indicator;
+    
+    }
+    
     @Override
     public int findTargetSnapPosition(RecyclerView.LayoutManager layoutManager, int velocityX, int velocityY) {
         
         int targetSnapPosition = super.findTargetSnapPosition(layoutManager, velocityX, velocityY);
-        L.i("targetSnapPosition => " + targetSnapPosition);
-        View snapView = findSnapView(layoutManager);
         
+        View snapView = findSnapView(layoutManager);
+    
+        LinearLayoutManager manager = (LinearLayoutManager) layoutManager;
         if (snapView != null) {
             int currentPosition = layoutManager.getPosition(snapView);
-            L.i("currentPosition => " + currentPosition);
-            LinearLayoutManager manager = (LinearLayoutManager) layoutManager;
-            
-            int firstVisibleItemPosition = manager.findFirstVisibleItemPosition();
-            int lastVisibleItemPosition = manager.findLastVisibleItemPosition();
-            
-            L.i("firstVisibleItemPosition => " + firstVisibleItemPosition + "\nlastVisibleItemPosition => " + lastVisibleItemPosition);
-
-//            currentPosition = targetSnapPosition < currentPosition ? lastVisibleItemPosition
-//                    : (targetSnapPosition > currentPosition ? firstVisibleItemPosition : currentPosition);
-//            L.i("currentPosition2 => "+currentPosition);
-//            targetSnapPosition = targetSnapPosition < currentPosition ? currentPosition - 1
-//                    : (targetSnapPosition > currentPosition ? currentPosition + 1 : currentPosition);
-//            L.i("targetSnapPosition2 => "+targetSnapPosition);
     
+            
+            
+            int first = manager.findFirstVisibleItemPosition();
+            int last = manager.findLastVisibleItemPosition();
+            
             if (targetSnapPosition != 0) {
                 if (targetSnapPosition == -1) {
-            
-                    if (firstVisibleItemPosition == lastVisibleItemPosition) {
+                    
+                    if (first == last) {
                         //上下滑动情况
                         targetSnapPosition = currentPosition;
-                    } else if (currentPosition == firstVisibleItemPosition) {
+                    } else if (currentPosition == first) {
                         targetSnapPosition = currentPosition < manager.getItemCount() ? currentPosition + 1 : currentPosition;
-                    } else if (currentPosition == lastVisibleItemPosition) {
+                    } else if (currentPosition == last) {
                         targetSnapPosition = currentPosition > 0 ? currentPosition - 1 : currentPosition;
                     }
-            
-            
+                    
                 } else {
-            
+                    currentPosition = targetSnapPosition < currentPosition ? last : (targetSnapPosition > currentPosition ? first : currentPosition);
                     targetSnapPosition = targetSnapPosition < currentPosition ?
                             (currentPosition > 0 ? currentPosition - 1 : currentPosition)
                             : (currentPosition < manager.getItemCount() ? currentPosition + 1 : currentPosition);
                 }
-            } else {
-    
-                L.i("targetSnapPosition => 0");
             }
-    
-            L.i("targetSnapPosition2 => " + (targetSnapPosition%manager.getItemCount()));
             
+            L.i("currentPosition => " + currentPosition);
         }
         
+        L.i("targetSnapPosition => " + targetSnapPosition);
         
+        indicatorPosition = targetSnapPosition;
         
-        L.i("--------------------------"+(targetSnapPosition)+"--------------------------------");
+        L.i("indicatorPosition => " + indicatorPosition);
+    
+        if (mIndicator != null) {
+            mIndicator.setCurrentItem(indicatorPosition);
+        }
         
         return targetSnapPosition;
     }

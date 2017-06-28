@@ -1,17 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
               android:layout_width="match_parent"
-              android:background="#EEE"
               android:layout_height="match_parent"
+              android:background="#EEE"
               android:orientation="vertical">
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/rv_banner"
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="180dp">
 
 
-    </android.support.v7.widget.RecyclerView>
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_banner"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
+
+        </android.support.v7.widget.RecyclerView>
+
+        <com.zonsim.yixue.banner.indicator.CirclePagerIndicator
+            android:id="@+id/indicator"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_gravity="bottom"
+            android:background="#CCCC"
+            app:circle_indicator_centerHorizontal="true"
+            app:circle_indicator_color="#FFF"
+            app:circle_indicator_fill_color="@color/colorPrimary"
+            app:circle_indicator_indicator_radius="5dp"
+            app:circle_indicator_radius="4dp"/>
+
+    </FrameLayout>
 
 </LinearLayout>

@@ -22,4 +22,14 @@
         android:text="RecyclerView 轮播"
         android:textAllCaps="false"/>
 
+
+    <com.zonsim.yixue.banner.RecyclerBanner
+        android:id="@+id/iv_banner"
+        android:background="#2439"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_marginTop="60dp">
+
+    </com.zonsim.yixue.banner.RecyclerBanner>
+
 </LinearLayout>

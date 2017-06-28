@@ -82,16 +82,11 @@ public class MyExamsActivity extends BaseActivity implements MyExamsView {
         
         Observable<Object> observable = new SwipeRefreshObservable(mSwipeRefreshLayout);
         observable.subscribe(new Consumer<Object>() {
-                    @Override
-                    public void accept(@NonNull Object o) throws Exception {
-                        L.i("refresh 1................");
-                        mPresenter.loadMyExams();
-                        
-                        
-//                                mSwipeRefreshLayout.setRefreshing(false);
-                        
-                    }
-                });
+            @Override
+            public void accept(@NonNull Object o) throws Exception {
+                mPresenter.loadMyExams();
+            }
+        });
         
     }
     
@@ -113,7 +108,7 @@ public class MyExamsActivity extends BaseActivity implements MyExamsView {
     
     @Override
     public void showLoadingUI(boolean isShow) {
-        System.out.println(isShow +"---------------");
+        System.out.println(isShow + "---------------");
         mVLoading.setVisibility(isShow ? View.VISIBLE : View.GONE);
     }
     
